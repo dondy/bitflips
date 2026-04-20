@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ##
 ##   usage: bitflips [options] <program>
@@ -31,7 +31,7 @@ def usage ():
   """
   stream = open(sys.argv[0])
   for line in stream.readlines():
-    if line.startswith('##'): print line.replace('##', ''),
+    if line.startswith('##'): print(line.replace('##', ''), end=' ')
   stream.close()
 
 
@@ -96,9 +96,9 @@ for arg in sys.argv[1:]:
   args.append(arg)
 
 command = "valgrind --tool=bitflips " + " ".join(args)
-print command
+print(command)
 
-stream = os.popen4(command)[1]
+stream = os.popen(command)
 
 for line in stream.readlines():
   if line.startswith("BF:"):
@@ -131,6 +131,6 @@ for line in stream.readlines():
     tokens = line.split(":")
     orig   = tokens[1].strip()
     line   = line.replace(orig, hex2float(orig))
-  print line,
+  print(line, end=' ')
 
 stream.close()
