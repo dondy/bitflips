@@ -48,16 +48,16 @@ on Valgrind.
 BITFLIPS is a Valgrind extension and therefore cannot be compiled or
 run without Valgrind.  First, download and untar a recent version of
 Valgrind from [http://valgrind.org/] (BITFLIPS has been tested with
-Valgrind 3.15.0):
+Valgrind 3.26.0):
 
 ```Console
-$ tar jxvf valgrind-3.15.0.tar.bz2
+$ tar jxvf valgrind-3.26.0.tar.bz2
 ```
 
 Check out BITFLIPS from github into the Valgrind source directory:
 
 ```Console
-$ cd valgrind-3.15.0
+$ cd valgrind-3.26.0
 $ git clone git@github.com:JPLMLIA/BITFLIPS.git
 ```
 
