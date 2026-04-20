@@ -130,28 +130,44 @@ $ make install
 Example usage of the Python BITFLIPS wrapper:
 
 ```Console
-$ bitflips --seed=42 --fault-rate=0.5 --inject-faults=no /proj/foamlatte/code/bitflips/test/dotprodd
+$ cd <path-to-bitflips>/example
+$ make
+$ bitflips --fault-rate=0.001 ./fibb
 ```
 
-The `dotprodd` example program performs a dot product on a 1000-element
-vector of doubles. The dot product is computed twice, once with SEU
-fault injection off and then again with it on.  This is achieved by the
-specification of the initial state `--inject-faults=no`; if this is
-omitted, it defaults to `yes` and both computations will be affected.
-Other example programs in the same directory include
-* `dotprods`: dot product on a vector of shorts
-* `dotprodi`: dot product on a vector of integers
-* `dotprodf`: dot product on a vector of floats
+```
+#include <iostream>
+#include <valgrind/bitflips.h>
+```
+Include the bitflips macros.
 
-The `dotprodd.c` C program, and corresponding `.c` programs for each
-of the above executables, demonstrate how to communicate with the
-BITFLIPS engine via `VALGRIND_BITFLIPS` macros. 
+```
+int main() {
+  long long a = 0, b = 1, temp;
+  int n = 50;
 
-The BITFLIPS macros result in processor no-ops when your program is
-run standalone (outside of BITFLIPS), so it's unobtrusive, convenient,
-and safe to leave them in your source code and compiled program at all
-times.
+  VALGRIND_BITFLIPS_MEM_ON(&a, 1, 1, BITFLIPS_LONG, BITFLIPS_ROW_MAJOR);
+  VALGRIND_BITFLIPS_MEM_ON(&b, 1, 1, BITFLIPS_LONG, BITFLIPS_ROW_MAJOR);
+```
+Declare which blocks (a and b) may recieve bitflips.
 
+```
+  for (int i = 0; i < n; i++) {
+    temp = a + b;
+    a = b;
+    b = temp;
+  }
+
+  std::cout << a << "\n";
+```
+Compute the n-th fibonacci number.
+
+```
+  VALGRIND_BITFLIPS_MEM_OFF(&a);
+  VALGRIND_BITFLIPS_MEM_OFF(&b);
+}
+```
+Stop watching the previously declared variables.
 
 # Command-line Parameters
 
